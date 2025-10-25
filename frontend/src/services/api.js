@@ -59,5 +59,23 @@ export const parkingAPI = {
       console.error('Error checking API health:', error);
       throw error;
     }
+  },
+
+  // Simulate sensor data
+  simulateSensor: async (parkingId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/simulate-sensor`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ parkingId }),
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error simulating sensor:', error);
+      throw error;
+    }
   }
 };

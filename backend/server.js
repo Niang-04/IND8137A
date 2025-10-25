@@ -38,22 +38,60 @@ let parkingSpots = [
   // Westmount
   { id: 15, name: "Westmount Square", lat: 45.4875, lng: -73.5892, type: "private", total: 75, available: 50, area: "Westmount" },
   { id: 16, name: "Avenue Greene", lat: 45.4830, lng: -73.5870, type: "public", total: 22, available: 9, area: "Westmount" },
+  
+  // Côte-des-Neiges - Detailed Alley Parking (3520 Boulevard Édouard-Montpetit)
+  { 
+    id: 17, 
+    name: "Ruelle 3520 Édouard-Montpetit", 
+    lat: 45.5043, 
+    lng: -73.6175, 
+    type: "public", 
+    total: 12, 
+    available: 7, 
+    area: "Côte-des-Neiges",
+    detailedView: true,
+    spaces: [
+      { id: 1, occupied: false, lat: 45.50435, lng: -73.61755 },
+      { id: 2, occupied: false, lat: 45.50432, lng: -73.61752 },
+      { id: 3, occupied: true, lat: 45.50429, lng: -73.61749 },
+      { id: 4, occupied: false, lat: 45.50426, lng: -73.61746 },
+      { id: 5, occupied: true, lat: 45.50423, lng: -73.61743 },
+      { id: 6, occupied: false, lat: 45.50420, lng: -73.61740 },
+      { id: 7, occupied: false, lat: 45.50435, lng: -73.61765 },
+      { id: 8, occupied: true, lat: 45.50432, lng: -73.61762 },
+      { id: 9, occupied: false, lat: 45.50429, lng: -73.61759 },
+      { id: 10, occupied: true, lat: 45.50426, lng: -73.61756 },
+      { id: 11, occupied: false, lat: 45.50423, lng: -73.61753 },
+      { id: 12, occupied: true, lat: 45.50420, lng: -73.61750 },
+    ]
+  },
 ];
 
 // Simulate real-time sensor updates
 setInterval(() => {
   parkingSpots = parkingSpots.map(spot => {
-    // Randomly change availability (simulate cars coming and going)
-    const change = Math.floor(Math.random() * 7) - 3; // -3 to +3
-    let newAvailable = spot.available + change;
-    
-    // Keep within bounds
-    newAvailable = Math.max(0, Math.min(spot.total, newAvailable));
-    
-    return {
-      ...spot,
-      available: newAvailable
-    };
+    if (spot.detailedView && spot.spaces) {
+      // For detailed view parking, update individual spaces
+      const updatedSpaces = spot.spaces.map(space => ({ ...space }));
+      const availableCount = updatedSpaces.filter(s => !s.occupied).length;
+      return {
+        ...spot,
+        available: availableCount,
+        spaces: updatedSpaces
+      };
+    } else {
+      // Randomly change availability (simulate cars coming and going)
+      const change = Math.floor(Math.random() * 7) - 3; // -3 to +3
+      let newAvailable = spot.available + change;
+      
+      // Keep within bounds
+      newAvailable = Math.max(0, Math.min(spot.total, newAvailable));
+      
+      return {
+        ...spot,
+        available: newAvailable
+      };
+    }
   });
 }, 10000); // Update every 10 seconds
 
@@ -109,6 +147,47 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     message: 'Park INC API is running',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Simulate sensor data change for detailed parking
+app.post('/api/simulate-sensor', (req, res) => {
+  const { parkingId } = req.body;
+  
+  const spot = parkingSpots.find(s => s.id === parseInt(parkingId));
+  
+  if (!spot) {
+    return res.status(404).json({
+      success: false,
+      message: 'Parking spot not found'
+    });
+  }
+  
+  if (!spot.detailedView || !spot.spaces) {
+    return res.status(400).json({
+      success: false,
+      message: 'This parking spot does not support detailed simulation'
+    });
+  }
+  
+  // Randomly toggle 1-3 parking spaces
+  const numChanges = Math.floor(Math.random() * 3) + 1;
+  const spotIndex = parkingSpots.findIndex(s => s.id === parseInt(parkingId));
+  
+  for (let i = 0; i < numChanges; i++) {
+    const randomSpaceIndex = Math.floor(Math.random() * spot.spaces.length);
+    parkingSpots[spotIndex].spaces[randomSpaceIndex].occupied = 
+      !parkingSpots[spotIndex].spaces[randomSpaceIndex].occupied;
+  }
+  
+  // Update available count
+  const availableCount = parkingSpots[spotIndex].spaces.filter(s => !s.occupied).length;
+  parkingSpots[spotIndex].available = availableCount;
+  
+  res.json({
+    success: true,
+    message: 'Sensor data simulated successfully',
+    data: parkingSpots[spotIndex]
   });
 });
 
