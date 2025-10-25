@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
+import { useEffect, useState, Fragment } from 'react';
+import { MapContainer, TileLayer, CircleMarker, Popup, useMap, Rectangle } from 'react-leaflet';
 import { parkingAPI } from '../services/api';
 import 'leaflet/dist/leaflet.css';
 import './MapView.css';
+
+// Constants for parking space visualization
+const PARKING_SPACE_SIZE = 0.00008; // Size of parking space rectangle in degrees
 
 // Component to update map view
 function ChangeView({ center, zoom }) {
@@ -18,6 +21,8 @@ function MapView() {
   const [selectedArea, setSelectedArea] = useState('all');
   const [error, setError] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(null);
+  const [simulationStatus, setSimulationStatus] = useState('');
+  const [isSimulating, setIsSimulating] = useState(false);
 
   // Montreal coordinates
   const montrealCenter = [45.5017, -73.5673];
@@ -69,6 +74,37 @@ function MapView() {
     if (occupancy < 50) return '#10b981'; // Green - low occupancy
     if (occupancy < 80) return '#f59e0b'; // Orange - medium occupancy
     return '#ef4444'; // Red - high occupancy
+  };
+
+  // Handle sensor simulation
+  const handleSimulateSensor = async () => {
+    setIsSimulating(true);
+    setSimulationStatus('Simulating sensor data...');
+    
+    try {
+      // Find the detailed parking spot (ID 17 - Ruelle 3520 Édouard-Montpetit)
+      const result = await parkingAPI.simulateSensor(17);
+      
+      if (result.success) {
+        setSimulationStatus('✅ Sensor data updated successfully!');
+        // Fetch updated data immediately
+        await fetchParkingData();
+        
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+          setSimulationStatus('');
+        }, 3000);
+      }
+    } catch (err) {
+      setSimulationStatus('❌ Failed to simulate sensor data');
+      console.error(err);
+      
+      setTimeout(() => {
+        setSimulationStatus('');
+      }, 3000);
+    } finally {
+      setIsSimulating(false);
+    }
   };
 
   if (loading) {
@@ -124,6 +160,23 @@ function MapView() {
                 ))}
               </select>
             </div>
+          </div>
+
+          <div className="simulation-section">
+            <h3>🎯 Sensor Simulation</h3>
+            <p>Simulate real-time sensor data for the alley at 3520 Boulevard Édouard-Montpetit</p>
+            <button 
+              className="simulate-button"
+              onClick={handleSimulateSensor}
+              disabled={isSimulating}
+            >
+              {isSimulating ? '⏳ Simulating...' : '🔄 Simulate Sensor Data'}
+            </button>
+            {simulationStatus && (
+              <div className={`simulation-status ${simulationStatus.includes('✅') ? 'success' : simulationStatus.includes('❌') ? 'error' : ''}`}>
+                {simulationStatus}
+              </div>
+            )}
           </div>
 
           <div className="legend">
@@ -183,11 +236,67 @@ function MapView() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           
-          {filteredSpots.map(spot => (
-            <CircleMarker
-              key={spot.id}
-              center={[spot.lat, spot.lng]}
-              radius={15}
+          {filteredSpots.map(spot => {
+            // Render detailed parking spaces for the alley
+            if (spot.detailedView && spot.spaces) {
+              return (
+                <Fragment key={`detailed-${spot.id}`}>
+                  {/* Main marker for the alley */}
+                  <CircleMarker
+                    center={[spot.lat, spot.lng]}
+                    radius={20}
+                    fillColor="#667eea"
+                    color="white"
+                    weight={3}
+                    opacity={1}
+                    fillOpacity={0.7}
+                  >
+                    <Popup>
+                      <div className="popup-content">
+                        <h3>{spot.name}</h3>
+                        <div className="popup-details">
+                          <p><strong>Type:</strong> {spot.type === 'public' ? '🅿️ Public' : '🏢 Private'}</p>
+                          <p><strong>Area:</strong> {spot.area}</p>
+                          <p><strong>Available:</strong> {spot.available} / {spot.total}</p>
+                          <p><strong>Detailed View:</strong> Individual spaces shown below</p>
+                        </div>
+                      </div>
+                    </Popup>
+                  </CircleMarker>
+                  
+                  {/* Individual parking spaces */}
+                  {spot.spaces.map(space => (
+                    <Rectangle
+                      key={`space-${spot.id}-${space.id}`}
+                      bounds={[
+                        [space.lat - PARKING_SPACE_SIZE, space.lng - PARKING_SPACE_SIZE],
+                        [space.lat + PARKING_SPACE_SIZE, space.lng + PARKING_SPACE_SIZE]
+                      ]}
+                      pathOptions={{
+                        color: space.occupied ? '#ef4444' : '#10b981',
+                        fillColor: space.occupied ? '#ef4444' : '#10b981',
+                        fillOpacity: 0.8,
+                        weight: 2
+                      }}
+                    >
+                      <Popup>
+                        <div className="popup-content">
+                          <h3>Space #{space.id}</h3>
+                          <p><strong>Status:</strong> {space.occupied ? '🔴 Occupied' : '🟢 Available'}</p>
+                          <p><strong>Location:</strong> {spot.name}</p>
+                        </div>
+                      </Popup>
+                    </Rectangle>
+                  ))}
+                </Fragment>
+              );
+            } else {
+              // Regular circle marker for standard parking spots
+              return (
+                <CircleMarker
+                  key={spot.id}
+                  center={[spot.lat, spot.lng]}
+                  radius={15}
               fillColor={getColor(spot)}
               color="white"
               weight={2}
@@ -215,7 +324,9 @@ function MapView() {
                 </div>
               </Popup>
             </CircleMarker>
-          ))}
+              );
+            }
+          })}
         </MapContainer>
       </div>
     </div>
