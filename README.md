@@ -2,10 +2,6 @@
 
 🚗 **Park INC** is a modern web application that displays real-time parking availability in Montreal on an interactive map. The application shows both private parking lots and public street parking, helping users find available parking spots quickly and efficiently.
 
-## Live Demo
-
-🌐 **[View Live Demo on GitHub Pages](https://niang-04.github.io/IND8137A/)**
-
 ## Features
 
 - 🗺️ **Interactive Map**: Real-time parking availability displayed on a Leaflet map
@@ -169,18 +165,6 @@ The backend simulates real-time parking sensor data by:
 - Push notifications for availability
 - Historical data and analytics
 - Multiple city support
-
-## Deployment
-
-### GitHub Pages
-
-The frontend is automatically deployed to GitHub Pages on every push to the `main` branch. See [GITHUB_PAGES.md](GITHUB_PAGES.md) for detailed deployment information.
-
-**Live Demo:** https://niang-04.github.io/IND8137A/
-
-### Full Stack Deployment
-
-For complete deployment instructions including backend hosting options, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Contributing
 
