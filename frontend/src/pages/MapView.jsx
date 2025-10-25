@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap, Rectangle } from 'react-leaflet';
 import { parkingAPI } from '../services/api';
 import 'leaflet/dist/leaflet.css';
 import './MapView.css';
+
+// Constants for parking space visualization
+const PARKING_SPACE_SIZE = 0.00008; // Size of parking space rectangle in degrees
 
 // Component to update map view
 function ChangeView({ center, zoom }) {
@@ -237,7 +240,7 @@ function MapView() {
             // Render detailed parking spaces for the alley
             if (spot.detailedView && spot.spaces) {
               return (
-                <div key={`detailed-${spot.id}`}>
+                <Fragment key={`detailed-${spot.id}`}>
                   {/* Main marker for the alley */}
                   <CircleMarker
                     center={[spot.lat, spot.lng]}
@@ -262,33 +265,30 @@ function MapView() {
                   </CircleMarker>
                   
                   {/* Individual parking spaces */}
-                  {spot.spaces.map(space => {
-                    const spaceSize = 0.00008; // Size of parking space rectangle
-                    return (
-                      <Rectangle
-                        key={`space-${spot.id}-${space.id}`}
-                        bounds={[
-                          [space.lat - spaceSize, space.lng - spaceSize],
-                          [space.lat + spaceSize, space.lng + spaceSize]
-                        ]}
-                        pathOptions={{
-                          color: space.occupied ? '#ef4444' : '#10b981',
-                          fillColor: space.occupied ? '#ef4444' : '#10b981',
-                          fillOpacity: 0.8,
-                          weight: 2
-                        }}
-                      >
-                        <Popup>
-                          <div className="popup-content">
-                            <h3>Space #{space.id}</h3>
-                            <p><strong>Status:</strong> {space.occupied ? '🔴 Occupied' : '🟢 Available'}</p>
-                            <p><strong>Location:</strong> {spot.name}</p>
-                          </div>
-                        </Popup>
-                      </Rectangle>
-                    );
-                  })}
-                </div>
+                  {spot.spaces.map(space => (
+                    <Rectangle
+                      key={`space-${spot.id}-${space.id}`}
+                      bounds={[
+                        [space.lat - PARKING_SPACE_SIZE, space.lng - PARKING_SPACE_SIZE],
+                        [space.lat + PARKING_SPACE_SIZE, space.lng + PARKING_SPACE_SIZE]
+                      ]}
+                      pathOptions={{
+                        color: space.occupied ? '#ef4444' : '#10b981',
+                        fillColor: space.occupied ? '#ef4444' : '#10b981',
+                        fillOpacity: 0.8,
+                        weight: 2
+                      }}
+                    >
+                      <Popup>
+                        <div className="popup-content">
+                          <h3>Space #{space.id}</h3>
+                          <p><strong>Status:</strong> {space.occupied ? '🔴 Occupied' : '🟢 Available'}</p>
+                          <p><strong>Location:</strong> {spot.name}</p>
+                        </div>
+                      </Popup>
+                    </Rectangle>
+                  ))}
+                </Fragment>
               );
             } else {
               // Regular circle marker for standard parking spots

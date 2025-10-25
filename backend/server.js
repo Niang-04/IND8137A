@@ -4,6 +4,9 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Simulation configuration
+const MAX_SIMULTANEOUS_CHANGES = 3; // Maximum number of parking spaces that can change in one simulation
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -170,8 +173,8 @@ app.post('/api/simulate-sensor', (req, res) => {
     });
   }
   
-  // Randomly toggle 1-3 parking spaces
-  const numChanges = Math.floor(Math.random() * 3) + 1;
+  // Randomly toggle 1-MAX_SIMULTANEOUS_CHANGES parking spaces
+  const numChanges = Math.floor(Math.random() * MAX_SIMULTANEOUS_CHANGES) + 1;
   const spotIndex = parkingSpots.findIndex(s => s.id === parseInt(parkingId));
   
   for (let i = 0; i < numChanges; i++) {
