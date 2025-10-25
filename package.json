@@ -1,0 +1,24 @@
+{
+  "name": "park-inc",
+  "version": "1.0.0",
+  "description": "Real-time parking availability web application for Montreal",
+  "scripts": {
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "dev:backend": "cd backend && npm run dev"
+  },
+  "keywords": [
+    "parking",
+    "real-time",
+    "montreal",
+    "react",
+    "nodejs",
+    "leaflet"
+  ],
+  "author": "",
+  "license": "MIT"
+}

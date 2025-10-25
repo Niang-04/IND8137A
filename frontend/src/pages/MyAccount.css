@@ -1,0 +1,322 @@
+.account-page {
+  min-height: calc(100vh - 70px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 40px 20px;
+}
+
+.account-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.account-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.account-header h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.account-header p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+.account-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.account-section {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.account-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.section-header h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.edit-btn, .save-btn, .cancel-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.save-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+}
+
+.save-btn:hover {
+  background: #059669;
+}
+
+.cancel-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+}
+
+.cancel-btn:hover {
+  background: #dc2626;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-item label {
+  font-weight: 600;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.profile-item p {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.profile-item input {
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.profile-item input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.favorite-areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.area-tag {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.3s;
+}
+
+.stat-card:hover {
+  transform: scale(1.05);
+}
+
+.stat-icon {
+  font-size: 3rem;
+}
+
+.stat-info h3 {
+  font-size: 2rem;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.stat-info p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s;
+}
+
+.activity-item:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+}
+
+.activity-icon {
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-details h4 {
+  color: #2c3e50;
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+}
+
+.activity-details p {
+  color: #7f8c8d;
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+.activity-date {
+  color: #95a5a6;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .account-page {
+    padding: 20px 15px;
+  }
+
+  .account-header h1 {
+    font-size: 2rem;
+  }
+
+  .account-header p {
+    font-size: 1rem;
+  }
+
+  .account-section {
+    padding: 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .section-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+
+  .stat-icon {
+    font-size: 2.5rem;
+  }
+
+  .stat-info h3 {
+    font-size: 1.5rem;
+  }
+
+  .activity-item {
+    padding: 15px;
+  }
+
+  .activity-icon {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-page {
+    padding: 15px 10px;
+  }
+
+  .account-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .edit-btn, .save-btn, .cancel-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .favorite-areas {
+    gap: 10px;
+  }
+
+  .area-tag {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}
