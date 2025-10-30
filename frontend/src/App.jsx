@@ -2,17 +2,21 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { useState } from 'react';
 import MapView from './pages/MapView';
 import MyAccount from './pages/MyAccount';
+import { useTheme } from './contexts/ThemeContext';
+import { useLanguage } from './contexts/LanguageContext';
 import './App.css';
 
 function Navigation() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
 
   return (
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          🚗 Park INC
+          {t('nav.logo')}
         </Link>
         
         <button 
@@ -29,7 +33,7 @@ function Navigation() {
               className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
               onClick={() => setMenuOpen(false)}
             >
-              🗺️ Map
+              {t('nav.map')}
             </Link>
           </li>
           <li className="nav-item">
@@ -38,8 +42,26 @@ function Navigation() {
               className={`nav-link ${location.pathname === '/account' ? 'active' : ''}`}
               onClick={() => setMenuOpen(false)}
             >
-              👤 My Account
+              {t('nav.account')}
             </Link>
+          </li>
+          <li className="nav-item">
+            <button 
+              className="nav-link nav-button"
+              onClick={toggleTheme}
+              title={theme === 'light' ? 'Mode Nuit / Night Mode' : 'Mode Jour / Day Mode'}
+            >
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+          </li>
+          <li className="nav-item">
+            <button 
+              className="nav-link nav-button"
+              onClick={toggleLanguage}
+              title={language === 'fr' ? 'Switch to English' : 'Passer au Français'}
+            >
+              {language === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR'}
+            </button>
           </li>
         </ul>
       </div>

@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import './MyAccount.css';
 
 function MyAccount() {
+  const { t } = useLanguage();
   const [userData, setUserData] = useState({
     name: 'John Doe',
     email: 'john.doe@example.com',
     phone: '+1 (514) 555-0123',
     vehicle: 'Toyota Camry - ABC 123',
-    favoriteAreas: ['Downtown', 'Old Montreal', 'Plateau']
+    favoriteAreas: ['downtown', 'oldMontreal', 'plateau'] // Store keys instead of translated values
   });
+
+  // Translate favorite areas dynamically
+  const translatedFavoriteAreas = useMemo(() => 
+    userData.favoriteAreas.map(area => t(`account.areas.${area}`)),
+    [userData.favoriteAreas, t]
+  );
 
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ ...userData });
@@ -40,26 +48,26 @@ function MyAccount() {
     <div className="account-page">
       <div className="account-container">
         <div className="account-header">
-          <h1>👤 My Account</h1>
-          <p>Manage your Park INC profile and preferences</p>
+          <h1>{t('account.title')}</h1>
+          <p>{t('account.subtitle')}</p>
         </div>
 
         <div className="account-sections">
           {/* Profile Section */}
           <div className="account-section">
             <div className="section-header">
-              <h2>Personal Information</h2>
+              <h2>{t('account.personalInfo')}</h2>
               {!isEditing ? (
                 <button onClick={handleEdit} className="edit-btn">
-                  ✏️ Edit
+                  {t('account.edit')}
                 </button>
               ) : (
                 <div className="edit-actions">
                   <button onClick={handleSave} className="save-btn">
-                    ✓ Save
+                    {t('account.save')}
                   </button>
                   <button onClick={handleCancel} className="cancel-btn">
-                    ✕ Cancel
+                    {t('account.cancel')}
                   </button>
                 </div>
               )}
@@ -67,7 +75,7 @@ function MyAccount() {
 
             <div className="profile-grid">
               <div className="profile-item">
-                <label>Name</label>
+                <label>{t('account.name')}</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -81,7 +89,7 @@ function MyAccount() {
               </div>
 
               <div className="profile-item">
-                <label>Email</label>
+                <label>{t('account.email')}</label>
                 {isEditing ? (
                   <input
                     type="email"
@@ -95,7 +103,7 @@ function MyAccount() {
               </div>
 
               <div className="profile-item">
-                <label>Phone</label>
+                <label>{t('account.phone')}</label>
                 {isEditing ? (
                   <input
                     type="tel"
@@ -109,7 +117,7 @@ function MyAccount() {
               </div>
 
               <div className="profile-item">
-                <label>Vehicle</label>
+                <label>{t('account.vehicle')}</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -127,10 +135,10 @@ function MyAccount() {
           {/* Favorite Areas Section */}
           <div className="account-section">
             <div className="section-header">
-              <h2>Favorite Parking Areas</h2>
+              <h2>{t('account.favoriteAreas')}</h2>
             </div>
             <div className="favorite-areas">
-              {userData.favoriteAreas.map((area, index) => (
+              {translatedFavoriteAreas.map((area, index) => (
                 <div key={index} className="area-tag">
                   📍 {area}
                 </div>
@@ -141,35 +149,35 @@ function MyAccount() {
           {/* Statistics Section */}
           <div className="account-section">
             <div className="section-header">
-              <h2>Parking Statistics</h2>
+              <h2>{t('account.statistics')}</h2>
             </div>
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-icon">🚗</div>
                 <div className="stat-info">
                   <h3>42</h3>
-                  <p>Parking Sessions</p>
+                  <p>{t('account.parkingSessions')}</p>
                 </div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon">⏱️</div>
                 <div className="stat-info">
                   <h3>128h</h3>
-                  <p>Total Time Parked</p>
+                  <p>{t('account.totalTimeParked')}</p>
                 </div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon">💰</div>
                 <div className="stat-info">
                   <h3>$342</h3>
-                  <p>Total Spent</p>
+                  <p>{t('account.totalSpent')}</p>
                 </div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon">⭐</div>
                 <div className="stat-info">
-                  <h3>Downtown</h3>
-                  <p>Most Used Area</p>
+                  <h3>{t('account.areas.downtown')}</h3>
+                  <p>{t('account.mostUsedArea')}</p>
                 </div>
               </div>
             </div>
@@ -178,31 +186,31 @@ function MyAccount() {
           {/* Recent Activity */}
           <div className="account-section">
             <div className="section-header">
-              <h2>Recent Parking Sessions</h2>
+              <h2>{t('account.recentSessions')}</h2>
             </div>
             <div className="activity-list">
               <div className="activity-item">
                 <div className="activity-icon">🅿️</div>
                 <div className="activity-details">
-                  <h4>Place Ville Marie Parking</h4>
-                  <p>Downtown • 2 hours • $15</p>
-                  <span className="activity-date">Today, 2:30 PM</span>
+                  <h4>{t('account.activity.placeVilleMarie')}</h4>
+                  <p>{t('account.areas.downtown')} • 2 {t('account.hours')} • $15</p>
+                  <span className="activity-date">{t('account.today')}, 2:30 PM</span>
                 </div>
               </div>
               <div className="activity-item">
                 <div className="activity-icon">🅿️</div>
                 <div className="activity-details">
-                  <h4>Old Port Parking</h4>
-                  <p>Old Montreal • 3 hours • $20</p>
-                  <span className="activity-date">Yesterday, 4:00 PM</span>
+                  <h4>{t('account.activity.oldPort')}</h4>
+                  <p>{t('account.areas.oldMontreal')} • 3 {t('account.hours')} • $20</p>
+                  <span className="activity-date">{t('account.yesterday')}, 4:00 PM</span>
                 </div>
               </div>
               <div className="activity-item">
                 <div className="activity-icon">🅿️</div>
                 <div className="activity-details">
-                  <h4>Rue Sainte-Catherine</h4>
-                  <p>Downtown • 1 hour • $8</p>
-                  <span className="activity-date">2 days ago, 11:00 AM</span>
+                  <h4>{t('account.activity.sainteCatherine')}</h4>
+                  <p>{t('account.areas.downtown')} • 1 {t('account.hours')} • $8</p>
+                  <span className="activity-date">{t('account.daysAgo', { count: 2 })}, 11:00 AM</span>
                 </div>
               </div>
             </div>
