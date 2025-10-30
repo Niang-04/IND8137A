@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import './MyAccount.css';
 
@@ -9,8 +9,14 @@ function MyAccount() {
     email: 'john.doe@example.com',
     phone: '+1 (514) 555-0123',
     vehicle: 'Toyota Camry - ABC 123',
-    favoriteAreas: [t('account.areas.downtown'), t('account.areas.oldMontreal'), t('account.areas.plateau')]
+    favoriteAreas: ['downtown', 'oldMontreal', 'plateau'] // Store keys instead of translated values
   });
+
+  // Translate favorite areas dynamically
+  const translatedFavoriteAreas = useMemo(() => 
+    userData.favoriteAreas.map(area => t(`account.areas.${area}`)),
+    [userData.favoriteAreas, t]
+  );
 
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ ...userData });
@@ -132,7 +138,7 @@ function MyAccount() {
               <h2>{t('account.favoriteAreas')}</h2>
             </div>
             <div className="favorite-areas">
-              {userData.favoriteAreas.map((area, index) => (
+              {translatedFavoriteAreas.map((area, index) => (
                 <div key={index} className="area-tag">
                   📍 {area}
                 </div>
@@ -204,7 +210,7 @@ function MyAccount() {
                 <div className="activity-details">
                   <h4>{t('account.activity.sainteCatherine')}</h4>
                   <p>{t('account.areas.downtown')} • 1 {t('account.hours')} • $8</p>
-                  <span className="activity-date">2 {t('account.daysAgo').replace('{count}', '2')}, 11:00 AM</span>
+                  <span className="activity-date">{t('account.daysAgo', { count: 2 })}, 11:00 AM</span>
                 </div>
               </div>
             </div>

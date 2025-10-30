@@ -28,7 +28,7 @@ export const LanguageProvider = ({ children }) => {
     setLanguage(prevLang => prevLang === 'fr' ? 'en' : 'fr');
   };
 
-  const t = (key) => {
+  const t = (key, params = {}) => {
     const keys = key.split('.');
     let value = translations[language];
     
@@ -38,6 +38,13 @@ export const LanguageProvider = ({ children }) => {
         console.warn(`Translation key not found: ${key}`);
         return key;
       }
+    }
+    
+    // Replace parameters in the translation string
+    if (typeof value === 'string' && Object.keys(params).length > 0) {
+      return value.replace(/\{(\w+)\}/g, (match, paramKey) => {
+        return params[paramKey] !== undefined ? params[paramKey] : match;
+      });
     }
     
     return value;

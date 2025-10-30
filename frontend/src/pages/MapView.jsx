@@ -23,6 +23,7 @@ function MapView() {
   const [error, setError] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(null);
   const [simulationStatus, setSimulationStatus] = useState('');
+  const [simulationStatusType, setSimulationStatusType] = useState(''); // 'success', 'error', or ''
   const [isSimulating, setIsSimulating] = useState(false);
   const { t } = useLanguage();
 
@@ -81,7 +82,8 @@ function MapView() {
   // Handle sensor simulation
   const handleSimulateSensor = async () => {
     setIsSimulating(true);
-    setSimulationStatus('Simulating sensor data...');
+    setSimulationStatus(t('map.simulation.simulating'));
+    setSimulationStatusType('');
     
     try {
       // Find the detailed parking spot (ID 17 - Ruelle 3520 Édouard-Montpetit)
@@ -89,20 +91,24 @@ function MapView() {
       
       if (result.success) {
         setSimulationStatus(t('map.simulation.success'));
+        setSimulationStatusType('success');
         // Fetch updated data immediately
         await fetchParkingData();
         
         // Clear success message after 3 seconds
         setTimeout(() => {
           setSimulationStatus('');
+          setSimulationStatusType('');
         }, 3000);
       }
     } catch (err) {
       setSimulationStatus(t('map.simulation.error'));
+      setSimulationStatusType('error');
       console.error(err);
       
       setTimeout(() => {
         setSimulationStatus('');
+        setSimulationStatusType('');
       }, 3000);
     } finally {
       setIsSimulating(false);
@@ -175,7 +181,7 @@ function MapView() {
               {isSimulating ? t('map.simulation.simulating') : t('map.simulation.button')}
             </button>
             {simulationStatus && (
-              <div className={`simulation-status ${simulationStatus.includes('✅') ? 'success' : simulationStatus.includes('❌') ? 'error' : ''}`}>
+              <div className={`simulation-status ${simulationStatusType}`}>
                 {simulationStatus}
               </div>
             )}
