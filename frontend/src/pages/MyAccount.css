@@ -1,7 +1,8 @@
 .account-page {
   min-height: calc(100vh - 70px);
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--bg-secondary);
   padding: 40px 20px;
+  transition: background 0.3s ease;
 }
 
 .account-container {
@@ -15,13 +16,13 @@
 }
 
 .account-header h1 {
-  color: #2c3e50;
+  color: var(--text-heading);
   font-size: 2.5rem;
   margin-bottom: 10px;
 }
 
 .account-header p {
-  color: #7f8c8d;
+  color: var(--text-secondary);
   font-size: 1.1rem;
 }
 
@@ -32,16 +33,16 @@
 }
 
 .account-section {
-  background: white;
+  background: var(--card-bg);
   border-radius: 15px;
   padding: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 5px 15px var(--shadow);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s ease;
 }
 
 .account-section:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px var(--shadow);
 }
 
 .section-header {
@@ -50,11 +51,11 @@
   align-items: center;
   margin-bottom: 25px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .section-header h2 {
-  color: #2c3e50;
+  color: var(--text-heading);
   font-size: 1.5rem;
   margin: 0;
 }
@@ -112,24 +113,27 @@
 
 .profile-item label {
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
 .profile-item p {
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 1.1rem;
   padding: 10px;
-  background: #f8f9fa;
+  background: var(--input-bg);
   border-radius: 8px;
+  transition: background 0.3s ease;
 }
 
 .profile-item input {
   padding: 10px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  transition: border-color 0.3s, background 0.3s ease;
 }
 
 .profile-item input:focus {
@@ -201,14 +205,14 @@
   display: flex;
   gap: 15px;
   padding: 20px;
-  background: #f8f9fa;
+  background: var(--input-bg);
   border-radius: 12px;
   border-left: 4px solid #667eea;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .activity-item:hover {
-  background: #e9ecef;
+  background: var(--border-color);
   transform: translateX(5px);
 }
 
@@ -223,21 +227,22 @@
 }
 
 .activity-details h4 {
-  color: #2c3e50;
+  color: var(--text-heading);
   margin: 0 0 5px 0;
   font-size: 1.1rem;
 }
 
 .activity-details p {
-  color: #7f8c8d;
+  color: var(--text-secondary);
   margin: 5px 0;
   font-size: 0.9rem;
 }
 
 .activity-date {
-  color: #95a5a6;
+  color: var(--text-secondary);
   font-size: 0.85rem;
   font-style: italic;
+  opacity: 0.8;
 }
 
 /* Mobile Responsive */

@@ -1,6 +1,7 @@
 import { useEffect, useState, Fragment } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap, Rectangle } from 'react-leaflet';
 import { parkingAPI } from '../services/api';
+import { useLanguage } from '../contexts/LanguageContext';
 import 'leaflet/dist/leaflet.css';
 import './MapView.css';
 
@@ -23,6 +24,7 @@ function MapView() {
   const [lastUpdate, setLastUpdate] = useState(null);
   const [simulationStatus, setSimulationStatus] = useState('');
   const [isSimulating, setIsSimulating] = useState(false);
+  const { t } = useLanguage();
 
   // Montreal coordinates
   const montrealCenter = [45.5017, -73.5673];
@@ -86,7 +88,7 @@ function MapView() {
       const result = await parkingAPI.simulateSensor(17);
       
       if (result.success) {
-        setSimulationStatus('✅ Sensor data updated successfully!');
+        setSimulationStatus(t('map.simulation.success'));
         // Fetch updated data immediately
         await fetchParkingData();
         
@@ -96,7 +98,7 @@ function MapView() {
         }, 3000);
       }
     } catch (err) {
-      setSimulationStatus('❌ Failed to simulate sensor data');
+      setSimulationStatus(t('map.simulation.error'));
       console.error(err);
       
       setTimeout(() => {
@@ -111,7 +113,7 @@ function MapView() {
     return (
       <div className="map-loading">
         <div className="spinner"></div>
-        <p>Loading parking data...</p>
+        <p>{t('map.loading')}</p>
       </div>
     );
   }
@@ -120,42 +122,42 @@ function MapView() {
     <div className="map-view">
       <div className="map-controls">
         <div className="control-panel">
-          <h2>🚗 Montreal Parking Availability</h2>
+          <h2>{t('map.title')}</h2>
           
           <div className="filters">
             <div className="filter-group">
-              <label>Type:</label>
+              <label>{t('map.filterType')}</label>
               <div className="filter-buttons">
                 <button 
                   className={filter === 'all' ? 'active' : ''}
                   onClick={() => setFilter('all')}
                 >
-                  All
+                  {t('map.all')}
                 </button>
                 <button 
                   className={filter === 'public' ? 'active' : ''}
                   onClick={() => setFilter('public')}
                 >
-                  🅿️ Public
+                  {t('map.public')}
                 </button>
                 <button 
                   className={filter === 'private' ? 'active' : ''}
                   onClick={() => setFilter('private')}
                 >
-                  🏢 Private
+                  {t('map.private')}
                 </button>
               </div>
             </div>
 
             <div className="filter-group">
-              <label>Area:</label>
+              <label>{t('map.filterArea')}</label>
               <select 
                 value={selectedArea} 
                 onChange={(e) => setSelectedArea(e.target.value)}
               >
                 {areas.map(area => (
                   <option key={area} value={area}>
-                    {area === 'all' ? 'All Areas' : area}
+                    {area === 'all' ? t('map.allAreas') : area}
                   </option>
                 ))}
               </select>
@@ -163,14 +165,14 @@ function MapView() {
           </div>
 
           <div className="simulation-section">
-            <h3>🎯 Sensor Simulation</h3>
-            <p>Simulate real-time sensor data for the alley at 3520 Boulevard Édouard-Montpetit</p>
+            <h3>{t('map.simulation.title')}</h3>
+            <p>{t('map.simulation.description')}</p>
             <button 
               className="simulate-button"
               onClick={handleSimulateSensor}
               disabled={isSimulating}
             >
-              {isSimulating ? '⏳ Simulating...' : '🔄 Simulate Sensor Data'}
+              {isSimulating ? t('map.simulation.simulating') : t('map.simulation.button')}
             </button>
             {simulationStatus && (
               <div className={`simulation-status ${simulationStatus.includes('✅') ? 'success' : simulationStatus.includes('❌') ? 'error' : ''}`}>
@@ -180,37 +182,37 @@ function MapView() {
           </div>
 
           <div className="legend">
-            <h3>Legend:</h3>
+            <h3>{t('map.legend.title')}</h3>
             <div className="legend-items">
               <div className="legend-item">
                 <span className="legend-color" style={{ backgroundColor: '#10b981' }}></span>
-                <span>Low Occupancy (&lt;50%)</span>
+                <span>{t('map.legend.low')}</span>
               </div>
               <div className="legend-item">
                 <span className="legend-color" style={{ backgroundColor: '#f59e0b' }}></span>
-                <span>Medium Occupancy (50-80%)</span>
+                <span>{t('map.legend.medium')}</span>
               </div>
               <div className="legend-item">
                 <span className="legend-color" style={{ backgroundColor: '#ef4444' }}></span>
-                <span>High Occupancy (&gt;80%)</span>
+                <span>{t('map.legend.high')}</span>
               </div>
             </div>
           </div>
 
           <div className="stats">
             <div className="stat-item">
-              <span className="stat-label">Total Spots:</span>
+              <span className="stat-label">{t('map.stats.totalSpots')}</span>
               <span className="stat-value">{filteredSpots.length}</span>
             </div>
             <div className="stat-item">
-              <span className="stat-label">Available:</span>
+              <span className="stat-label">{t('map.stats.available')}</span>
               <span className="stat-value">
                 {filteredSpots.reduce((sum, spot) => sum + spot.available, 0)}
               </span>
             </div>
             {lastUpdate && (
               <div className="stat-item">
-                <span className="stat-label">Last Update:</span>
+                <span className="stat-label">{t('map.stats.lastUpdate')}</span>
                 <span className="stat-value">{lastUpdate.toLocaleTimeString()}</span>
               </div>
             )}
@@ -218,7 +220,7 @@ function MapView() {
 
           {error && (
             <div className="error-message">
-              ⚠️ {error}
+              {t('map.error')}
             </div>
           )}
         </div>
@@ -255,10 +257,10 @@ function MapView() {
                       <div className="popup-content">
                         <h3>{spot.name}</h3>
                         <div className="popup-details">
-                          <p><strong>Type:</strong> {spot.type === 'public' ? '🅿️ Public' : '🏢 Private'}</p>
-                          <p><strong>Area:</strong> {spot.area}</p>
-                          <p><strong>Available:</strong> {spot.available} / {spot.total}</p>
-                          <p><strong>Detailed View:</strong> Individual spaces shown below</p>
+                          <p><strong>{t('map.popup.type')}</strong> {spot.type === 'public' ? t('map.public') : t('map.private')}</p>
+                          <p><strong>{t('map.popup.area')}</strong> {spot.area}</p>
+                          <p><strong>{t('map.popup.available')}</strong> {spot.available} / {spot.total}</p>
+                          <p><strong>{t('map.popup.detailedView')}</strong> {t('map.popup.individualSpaces')}</p>
                         </div>
                       </div>
                     </Popup>
@@ -281,9 +283,9 @@ function MapView() {
                     >
                       <Popup>
                         <div className="popup-content">
-                          <h3>Space #{space.id}</h3>
-                          <p><strong>Status:</strong> {space.occupied ? '🔴 Occupied' : '🟢 Available'}</p>
-                          <p><strong>Location:</strong> {spot.name}</p>
+                          <h3>{t('map.popup.spaceNumber')}{space.id}</h3>
+                          <p><strong>{t('map.popup.status')}</strong> {space.occupied ? t('map.popup.occupied') : t('map.popup.availableStatus')}</p>
+                          <p><strong>{t('map.popup.location')}</strong> {spot.name}</p>
                         </div>
                       </Popup>
                     </Rectangle>
@@ -307,10 +309,10 @@ function MapView() {
                 <div className="popup-content">
                   <h3>{spot.name}</h3>
                   <div className="popup-details">
-                    <p><strong>Type:</strong> {spot.type === 'public' ? '🅿️ Public' : '🏢 Private'}</p>
-                    <p><strong>Area:</strong> {spot.area}</p>
-                    <p><strong>Available:</strong> {spot.available} / {spot.total}</p>
-                    <p><strong>Occupancy:</strong> {getOccupancyPercentage(spot).toFixed(0)}%</p>
+                    <p><strong>{t('map.popup.type')}</strong> {spot.type === 'public' ? t('map.public') : t('map.private')}</p>
+                    <p><strong>{t('map.popup.area')}</strong> {spot.area}</p>
+                    <p><strong>{t('map.popup.available')}</strong> {spot.available} / {spot.total}</p>
+                    <p><strong>{t('map.popup.occupancy')}</strong> {getOccupancyPercentage(spot).toFixed(0)}%</p>
                   </div>
                   <div className="availability-bar">
                     <div 

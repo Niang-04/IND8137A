@@ -1,7 +1,8 @@
 .map-view {
   display: flex;
   height: calc(100vh - 70px);
-  background: #f5f5f5;
+  background: var(--bg-secondary);
+  transition: background 0.3s ease;
 }
 
 .map-loading {
@@ -29,10 +30,11 @@
 
 .map-controls {
   width: 350px;
-  background: white;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  box-shadow: 2px 0 10px var(--shadow);
   overflow-y: auto;
   z-index: 500;
+  transition: background 0.3s ease;
 }
 
 .control-panel {
@@ -40,7 +42,7 @@
 }
 
 .control-panel h2 {
-  color: #2c3e50;
+  color: var(--text-heading);
   margin-bottom: 20px;
   font-size: 1.5rem;
 }
@@ -56,7 +58,7 @@
 .filter-group label {
   display: block;
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 10px;
 }
 
@@ -70,10 +72,11 @@
   flex: 1;
   min-width: 90px;
   padding: 10px;
-  background: #f0f0f0;
-  color: #333;
-  border: 2px solid transparent;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
   font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .filter-buttons button.active {
@@ -85,10 +88,11 @@
 .filter-group select {
   width: 100%;
   padding: 10px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   font-size: 1rem;
-  background: white;
+  background: var(--input-bg);
+  color: var(--text-primary);
   cursor: pointer;
   transition: border-color 0.3s;
 }
@@ -99,15 +103,17 @@
 }
 
 .legend {
-  background: #f8f9fa;
+  background: var(--input-bg);
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+  transition: background 0.3s ease;
 }
 
 .legend h3 {
   font-size: 1.1rem;
-  color: #2c3e50;
+  color: var(--text-heading);
   margin-bottom: 12px;
 }
 
@@ -122,6 +128,7 @@
   align-items: center;
   gap: 10px;
   font-size: 0.9rem;
+  color: var(--text-primary);
 }
 
 .legend-color {
@@ -170,21 +177,22 @@
 }
 
 .simulation-section {
-  background: #f0f4ff;
+  background: var(--input-bg);
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
   border: 2px solid #667eea;
+  transition: background 0.3s ease;
 }
 
 .simulation-section h3 {
-  color: #2c3e50;
+  color: var(--text-heading);
   font-size: 1.1rem;
   margin-bottom: 8px;
 }
 
 .simulation-section p {
-  color: #555;
+  color: var(--text-secondary);
   font-size: 0.85rem;
   margin-bottom: 12px;
   line-height: 1.4;
