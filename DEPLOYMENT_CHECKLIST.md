@@ -135,7 +135,7 @@ If you encounter issues:
 
 ## 🔗 Useful Links
 
-- GitHub Actions: https://github.com/YOUR_USERNAME/IND8137A/actions
+- GitHub Actions: https://github.com/Niang-04/IND8137A/actions
 - Heroku Dashboard: https://dashboard.heroku.com/apps/your-app-name
 - Heroku Logs: `heroku logs --tail --app your-app-name`
 
