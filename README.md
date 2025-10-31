@@ -166,6 +166,20 @@ The backend simulates real-time parking sensor data by:
 - Historical data and analytics
 - Multiple city support
 
+## Deployment
+
+### Automated Deployment (CI/CD)
+
+The backend can be automatically deployed to Heroku using GitHub Actions. See the [CI/CD Setup Guide](CICD_SETUP.md) for detailed instructions on:
+- Setting up GitHub Actions workflow
+- Configuring Heroku deployment
+- Managing environment variables
+- Monitoring deployments
+
+### Manual Deployment
+
+For manual deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## Contributing
 
 This is an educational project for demonstrating real-time parking availability visualization.
