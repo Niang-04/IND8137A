@@ -1,5 +1,7 @@
 # Park INC
 
+[![Deploy Backend to Heroku](https://github.com/Niang-04/IND8137A/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/Niang-04/IND8137A/actions/workflows/deploy-backend.yml)
+
 🚗 **Park INC** is a modern web application that displays real-time parking availability in Montreal on an interactive map. The application shows both private parking lots and public street parking, helping users find available parking spots quickly and efficiently.
 
 ## Features
