@@ -23,6 +23,8 @@ VITE_API_URL=https://your-backend-api.com/api
 
 ## Backend Deployment
 
+> **🚀 CI/CD Deployment**: For automated deployment with GitHub Actions to Heroku, see the [CI/CD Setup Guide](CICD_SETUP.md).
+
 ### Option 1: Traditional Server (VPS, EC2, etc.)
 
 1. SSH into your server

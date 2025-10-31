@@ -1,5 +1,7 @@
 # Park INC
 
+[![Deploy Backend to Heroku](https://github.com/Niang-04/IND8137A/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/Niang-04/IND8137A/actions/workflows/deploy-backend.yml)
+
 🚗 **Park INC** is a modern web application that displays real-time parking availability in Montreal on an interactive map. The application shows both private parking lots and public street parking, helping users find available parking spots quickly and efficiently.
 
 ## Features
@@ -165,6 +167,32 @@ The backend simulates real-time parking sensor data by:
 - Push notifications for availability
 - Historical data and analytics
 - Multiple city support
+
+## Deployment
+
+### 🚀 Automated Deployment (CI/CD) - RECOMMENDED
+
+The backend is configured for automatic deployment to Heroku using GitHub Actions.
+
+**Quick Start**: Follow [QUICKSTART_CICD.md](QUICKSTART_CICD.md) (5 minutes)
+
+**Complete Guide**: See [CICD_SETUP.md](CICD_SETUP.md) for detailed instructions
+
+**What's Included**:
+- ✅ Automatic deployment on push to main
+- ✅ Health checks and rollback on failure
+- ✅ Production-ready configuration
+- ✅ Comprehensive documentation
+
+**Files**:
+- `.github/workflows/deploy-backend.yml` - GitHub Actions workflow
+- `backend/Procfile` - Heroku configuration
+- `DEPLOYMENT_CHECKLIST.md` - Step-by-step guide
+- `IMPLEMENTATION_SUMMARY.md` - Overview of CI/CD setup
+
+### Manual Deployment
+
+For manual deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Contributing
 
